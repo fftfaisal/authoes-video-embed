@@ -1,7 +1,7 @@
-# === Autheos Video Embed ===
+# Autheos Video Embed
 Embed authoes videos into wordpress,woocommerce site.Also Generate thumbnail from autheos from Video,EAN ID then save into wordpress and use as post thumbnail automatically.
 
-## == Installation ==
+## Installation
 
 1. Upload `autheos-video-embed.zip` to the `/wp-content/plugins/` directory
 2. Unzip this zip file , You will get autheos-video-embed folder 
@@ -51,7 +51,7 @@ add this code into your active theme functions.php file
 
 ## Changelog 
 
-- 1.0.0 
-* Initial release of this plugin.
+#### 1.0.0 - 2021-02-10
+- Initial release of this plugin.
 
 
