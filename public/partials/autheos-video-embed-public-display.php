@@ -8,8 +8,8 @@
  * @link       https://faisal.com.bd
  * @since      1.0.0
  *
- * @package    Authoes_Video_Embed
- * @subpackage Authoes_Video_Embed/public/partials
+ * @package    Autheos_Video_Embed
+ * @subpackage Autheos_Video_Embed/public/partials
  */
 ?>
 

@@ -9,8 +9,8 @@
  * @link       https://faisal.com.bd
  * @since      1.0.0
  *
- * @package    Authoes_Video_Embed
- * @subpackage Authoes_Video_Embed/includes
+ * @package    Autheos_Video_Embed
+ * @subpackage Autheos_Video_Embed/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Authoes_Video_Embed
- * @subpackage Authoes_Video_Embed/includes
+ * @package    Autheos_Video_Embed
+ * @subpackage Autheos_Video_Embed/includes
  * @author     Faisal Ahmed <fftfaisal@gmail.com>
  */
-class Authoes_Video_Embed_i18n {
+class Autheos_Video_Embed_i18n {
 
 
 	/**
@@ -35,7 +35,7 @@ class Authoes_Video_Embed_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'authoes-video-embed',
+			'autheos-video-embed',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

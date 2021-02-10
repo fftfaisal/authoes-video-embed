@@ -10,18 +10,18 @@
  *
  * @link              https://faisal.com.bd
  * @since             1.0.0
- * @package           Authoes_Video_Embed
+ * @package           Autheos_Video_Embed
  *
  * @wordpress-plugin
  * Plugin Name:       Autheos Video Embed
- * Plugin URI:        https://github.com/fftfaisal/authoes-video-embed/
- * Description:       Embed authoes videos into wordpress,woocommerce site.Also Generate thumbnail from autheos from Video,EAN ID then save into wordpress and use as post thumbnail automatically.
+ * Plugin URI:        https://github.com/fftfaisal/autheos-video-embed/
+ * Description:       Embed autheos videos into wordpress,woocommerce site.Also Generate thumbnail from autheos from Video,EAN ID then save into wordpress and use as post thumbnail automatically.
  * Version:           1.0.0
  * Author:            Faisal Ahmed
  * Author URI:        https://faisal.com.bd
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       authoes-video-embed
+ * Text Domain:       autheos-video-embed
  * Domain Path:       /languages
  */
 
@@ -35,34 +35,34 @@ if ( !defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'AUTHOES_VIDEO_EMBED_VERSION', '1.0.0' );
+define( 'AUTHEOS_VIDEO_EMBED_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-authoes-video-embed-activator.php
+ * This action is documented in includes/class-autheos-video-embed-activator.php
  */
-function activate_authoes_video_embed() {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-authoes-video-embed-activator.php';
-    Authoes_Video_Embed_Activator::activate();
+function activate_autheos_video_embed() {
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-autheos-video-embed-activator.php';
+    Autheos_Video_Embed_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-authoes-video-embed-deactivator.php
+ * This action is documented in includes/class-autheos-video-embed-deactivator.php
  */
-function deactivate_authoes_video_embed() {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-authoes-video-embed-deactivator.php';
-    Authoes_Video_Embed_Deactivator::deactivate();
+function deactivate_autheos_video_embed() {
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-autheos-video-embed-deactivator.php';
+    Autheos_Video_Embed_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_authoes_video_embed' );
-register_deactivation_hook( __FILE__, 'deactivate_authoes_video_embed' );
+register_activation_hook( __FILE__, 'activate_autheos_video_embed' );
+register_deactivation_hook( __FILE__, 'deactivate_autheos_video_embed' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-authoes-video-embed.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-autheos-video-embed.php';
 
 /**
  * Begins execution of the plugin.
@@ -73,11 +73,11 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-authoes-video-embed.php';
  *
  * @since    1.0.0
  */
-function run_authoes_video_embed() {
+function run_autheos_video_embed() {
 
-    $plugin = new Authoes_Video_Embed();
+    $plugin = new Autheos_Video_Embed();
     $plugin->run();
 
 }
 
-run_authoes_video_embed();
+run_autheos_video_embed();

@@ -1,0 +1,81 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+#video-1117837-container, .ovr-video-container {
+    outline: #ffffff solid 4px;
+    max-width: 100%;
+}
+#video-1117837-container div, .ovr-video-container div {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+iframe.autheos-videoplayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.autheos-thumbnail-wrapper {
+    margin-top: 20px;
+}
+.autheos-thumbnail-wrap .thumb-item {
+    margin: 10px;
+}
+.autheos-videothumbnail-small {
+    width: 100%;
+    overflow: visible;
+    height: auto;
+}
+.autheos-videothumbnail-small .autheos-videothumbnail__type-label {
+    top: -19px;
+}
+.autheos-videothumbnail-small .autheos-videothumbnail__play-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 30px;
+}
+.autheos-videothumbnail-small .autheos-videothumbnail__play-icon:after {
+    top: 12px;
+    left: 12px;
+    border-width: 7px 0 7px 14px;
+}
+.autheos-thumbnail-wrapper .slick-next, .autheos-thumbnail-wrapper .slick-prev {
+    width: auto;
+    height: auto;
+}
+.autheos-thumbnail-wrapper .slick-next::before, .autheos-thumbnail-wrapper .slick-prev::before {
+    font-size: 30px;
+    opacity: 1;
+    color: #000;
+}
+/* clickable-image video */
+#some-widget {
+    width: 640px;
+    height: 360px;
+    display: block;
+}
+
+#clickable-image {
+    cursor: pointer;
+}
+
+#video-container, #video-container>iframe {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+ /* reponsive the player */
+@media all and (max-width: 480px) {
+    .autheos-videothumbnail-small .autheos-videothumbnail__play-icon {
+        display: none;
+    }
+    .autheos-thumbnail-wrapper {
+        margin-right: 40px;
+        margin-left: 40px;
+    }
+}

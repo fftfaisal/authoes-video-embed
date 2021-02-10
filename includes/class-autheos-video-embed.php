@@ -9,8 +9,8 @@
  * @link       https://faisal.com.bd
  * @since      1.0.0
  *
- * @package    Authoes_Video_Embed
- * @subpackage Authoes_Video_Embed/includes
+ * @package    Autheos_Video_Embed
+ * @subpackage Autheos_Video_Embed/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Authoes_Video_Embed
- * @subpackage Authoes_Video_Embed/includes
+ * @package    Autheos_Video_Embed
+ * @subpackage Autheos_Video_Embed/includes
  * @author     Faisal Ahmed <fftfaisal@gmail.com>
  */
-class Authoes_Video_Embed {
+class Autheos_Video_Embed {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Authoes_Video_Embed {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Authoes_Video_Embed_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Autheos_Video_Embed_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -67,12 +67,12 @@ class Authoes_Video_Embed {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'AUTHOES_VIDEO_EMBED_VERSION' ) ) {
-			$this->version = AUTHOES_VIDEO_EMBED_VERSION;
+		if ( defined( 'AUTHEOS_VIDEO_EMBED_VERSION' ) ) {
+			$this->version = AUTHEOS_VIDEO_EMBED_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'authoes-video-embed';
+		$this->plugin_name = 'autheos-video-embed';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -86,10 +86,10 @@ class Authoes_Video_Embed {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Authoes_Video_Embed_Loader. Orchestrates the hooks of the plugin.
-	 * - Authoes_Video_Embed_i18n. Defines internationalization functionality.
-	 * - Authoes_Video_Embed_Admin. Defines all hooks for the admin area.
-	 * - Authoes_Video_Embed_Public. Defines all hooks for the public side of the site.
+	 * - Autheos_Video_Embed_Loader. Orchestrates the hooks of the plugin.
+	 * - Autheos_Video_Embed_i18n. Defines internationalization functionality.
+	 * - Autheos_Video_Embed_Admin. Defines all hooks for the admin area.
+	 * - Autheos_Video_Embed_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -103,33 +103,38 @@ class Authoes_Video_Embed {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-authoes-video-embed-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-autheos-video-embed-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-authoes-video-embed-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-autheos-video-embed-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-authoes-video-embed-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-autheos-video-embed-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-authoes-video-embed-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-autheos-video-embed-public.php';
 
-		$this->loader = new Authoes_Video_Embed_Loader();
+		/**
+		 * The class responsible for defining shortcode of autheos videos
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-autheos-video-embed-shortcode.php';
+
+		$this->loader = new Autheos_Video_Embed_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Authoes_Video_Embed_i18n class in order to set the domain and to register the hook
+	 * Uses the Autheos_Video_Embed_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -137,7 +142,7 @@ class Authoes_Video_Embed {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Authoes_Video_Embed_i18n();
+		$plugin_i18n = new Autheos_Video_Embed_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -152,11 +157,17 @@ class Authoes_Video_Embed {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Authoes_Video_Embed_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Autheos_Video_Embed_Admin( $this->get_plugin_name(), $this->get_version() );
+
+		$plugin_shortcode = new Autheos_Video_Embed_Shortcode( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action('init',$plugin_shortcode,'register_autheos_shortcode');
+		$this->loader->add_filter('post_thumbnail_html',$plugin_shortcode,'autheos_show_post_thumnail',20,5);
+		//$this->loader->add_filter('get_post_metadata',$plugin_shortcode,'autheos_set_post_thumnail',10,4);
+		$this->loader->add_action('the_post',$plugin_shortcode,'autheos_set_post_thumnail',10,2);
 	}
 
 	/**
@@ -168,7 +179,7 @@ class Authoes_Video_Embed {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Authoes_Video_Embed_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Autheos_Video_Embed_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -199,7 +210,7 @@ class Authoes_Video_Embed {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Authoes_Video_Embed_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Autheos_Video_Embed_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
