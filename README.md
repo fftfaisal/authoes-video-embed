@@ -54,4 +54,8 @@ add this code into your active theme functions.php file
 #### 1.0.0 - 2021-02-10
 - Initial release of this plugin.
 
+#### 1.0.1 - 2021-02-17
+- default no thumbnail changed functionality added
+- added plugin setting page
+- improve and fix bugs
 
