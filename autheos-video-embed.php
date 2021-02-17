@@ -16,7 +16,7 @@
  * Plugin Name:       Autheos Video Embed
  * Plugin URI:        https://github.com/fftfaisal/autheos-video-embed/
  * Description:       Embed autheos videos into wordpress,woocommerce site.Also Generate thumbnail from autheos from Video,EAN ID then save into wordpress and use as post thumbnail automatically.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Faisal Ahmed
  * Author URI:        https://faisal.com.bd
  * License:           GPL-2.0+
@@ -35,7 +35,8 @@ if ( !defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'AUTHEOS_VIDEO_EMBED_VERSION', '1.0.0' );
+define( 'AUTHEOS_VIDEO_EMBED_VERSION', '1.0.1' );
+define( 'AUTHEOS_PLUGIN_BASE',  plugin_basename(__FILE__) );
 
 /**
  * The code that runs during plugin activation.

@@ -156,7 +156,6 @@ class Autheos_Video_Embed {
 	 * @access   private
 	 */
 	private function define_admin_hooks() {
-
 		$plugin_admin = new Autheos_Video_Embed_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$plugin_shortcode = new Autheos_Video_Embed_Shortcode( $this->get_plugin_name(), $this->get_version() );
@@ -166,8 +165,12 @@ class Autheos_Video_Embed {
 
 		$this->loader->add_action('init',$plugin_shortcode,'register_autheos_shortcode');
 		$this->loader->add_filter('post_thumbnail_html',$plugin_shortcode,'autheos_show_post_thumnail',20,5);
-		//$this->loader->add_filter('get_post_metadata',$plugin_shortcode,'autheos_set_post_thumnail',10,4);
+		// $this->loader->add_filter('get_post_metadata',$plugin_shortcode,'autheos_set_post_thumnail',10,4);
 		$this->loader->add_action('the_post',$plugin_shortcode,'autheos_set_post_thumnail',10,2);
+		$this->loader->add_filter("plugin_action_links_".AUTHEOS_PLUGIN_BASE, $plugin_admin, 'autheos_plugin_settings_link' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'autheos_settiings_page' );
+		$this->loader->add_action('admin_init', $plugin_admin, 'autheos_register_setting_fields');
+		$this->loader->add_action('wp_ajax_authoes_get_thumbnail', $plugin_admin, 'autheos_ajax_get_thumbnail');
 	}
 
 	/**

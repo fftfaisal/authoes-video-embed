@@ -310,6 +310,7 @@ class Autheos_Video_Embed_Shortcode {
         if( $video_id != null || !empty($video_id) ) {
             $video_thumbnail_url = $this->get_thumbnail_from_autheos_video_id( $video_id ) ;
             if ( $video_thumbnail_url ) {
+                //var_dump($video_thumbnail_url);
                 return $video_thumbnail_url;
             }
         }
@@ -331,20 +332,15 @@ class Autheos_Video_Embed_Shortcode {
      * @return string thumbnail
      */
     private function autheos_get_post_thumbnail_url($post_id) {
-        
         $youtube_thumnail = $this->autheos_youtube_thumbnail_generator($post_id);
         $autheos_thumnail = $this->get_autheos_id_from_shorcode($post_id);
-        
         if ( $youtube_thumnail == null  && $autheos_thumnail == null ) {
-            $thumbnail_url = plugin_dir_url( dirname( __FILE__ ) ) . 'public/images/no-video-thumbnail.jpg';
-            return $thumbnail_url;
+            return -1;
         }
 
         if ($youtube_thumnail) return $youtube_thumnail;
     
         if($autheos_thumnail) return $autheos_thumnail;
-
-    
     }
 
     /**
@@ -352,29 +348,37 @@ class Autheos_Video_Embed_Shortcode {
      * @param string $html
      * @return string $html
      */
-    public function autheos_set_post_thumnail( $object,$wp_query ) {
+    public function autheos_set_post_thumnail( $object, $wp_query ) {
         $object_id = get_the_id($object);
         // Only affect thumbnails on the frontend, do allow ajax calls.
 		if ( ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) ) {
 			return;
 		}
-
 		// Check only empty meta_key and '_thumbnail_id'.
         $thumbnail_id = get_post_meta($object_id,'_thumbnail_id',true);
-        $authoes_thumbnail_id = get_post_meta($object_id,'_authoes_thumbnail_id',true);
-		if ( !empty($authoes_thumbnail_id) ) {
-			return;
-		}
-
+        if( !empty($thumbnail_id) && (int) $thumbnail_id != -1 ) {
+            return;
+        }
 		// Check if this post type supports featured images.
 		if ( ! post_type_supports( get_post_type( $object ), 'thumbnail' ) ) {
-			return; // post type does not support featured images.
+            return; // post type does not support featured images.
 		}
+
         //set fake thumbail for emthy thumbnail post
         update_post_meta($object_id,'_thumbnail_id',-1);
-        $url =  $this->autheos_get_post_thumbnail_url( $object_id );
+        $default_thumbnail_id = get_option('autheos_setting_options');
+        $authoes_thumbnail_id = get_post_meta($object_id,'_authoes_thumbnail_id',true);
+
+        if ( !empty($authoes_thumbnail_id && $authoes_thumbnail_id == $default_thumbnail_id['default_thumbnail']) ) {
+            return;
+        }
+        $url_or_id =  $this->autheos_get_post_thumbnail_url( $object_id );
         // seve autheos thubnail as post meta into database
-        update_post_meta($object_id,'_authoes_thumbnail_id',$url);
+        if($url_or_id == -1 ) {
+            update_post_meta($object_id, '_authoes_thumbnail_id', $default_thumbnail_id['default_thumbnail']);
+        } else {
+            update_post_meta($object_id, '_authoes_thumbnail_id', $url_or_id);
+        }
     }
 
     /**
@@ -384,10 +388,23 @@ class Autheos_Video_Embed_Shortcode {
      */
     public function autheos_show_post_thumnail( $html,$post_id,$post_thumbnail_id,$size,$attr ) {
         $authoes_thumbnail_id = get_post_meta($post_id,'_authoes_thumbnail_id',true);
-        //var_dump($authoes_thumbnail_id);
+        $fake_thumbnail_id = get_post_meta($post_id,'_thumbnail_id',true);
+
         //checking if image is empty and display autheos image
         if( !empty($authoes_thumbnail_id) && empty($html) ) {
-            $html = sprintf( '<img class="autheos-video-image" src="%s" alt="%s"/>', $authoes_thumbnail_id, get_the_title($post_id) );
+            
+            if( !wp_attachment_is_image($authoes_thumbnail_id) ) {
+                $html = sprintf( '<img class="autheos-video-image" src="%s" alt="%s"/>', $authoes_thumbnail_id, get_the_title($post_id) );
+            } else {
+                $html = wp_get_attachment_image($authoes_thumbnail_id,'full');
+            }
+        }
+        else if ((int) $fake_thumbnail_id == -1) {
+            $html = sprintf( '
+                <img class="autheos-video-image" src="%s" alt="%s"/>', 
+                plugin_dir_url( dirname( __FILE__ ) ) . 'public/images/no-video-thumbnail.jpg', 
+                get_the_title($post_id) 
+            );
         }
         else {
             //add a custom class into exsiting image

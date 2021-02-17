@@ -30,11 +30,16 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 $autheos_post_query = array('post_type' => 'post', 'posts_per_page' => -1);
+$plugin_data = get_option('autheos_setting_options');
+
 $autheos_posts = get_posts($autheos_post_query);
 foreach ($autheos_posts as $post) {
 	$get_fake_thumbnail_id = get_post_meta($post->ID,'_thumbnail_id',true);
-	if($get_fake_thumbnail_id == -1) {
-		update_post_meta($post->ID,'_thumbnail_id','');
+	if(isset($plugin_data['delete_data']) && $plugin_data['delete_data'] == 'yes') {
+		if($get_fake_thumbnail_id == -1) {
+			update_post_meta($post->ID,'_thumbnail_id','');
+		}
+		delete_post_meta($post->ID, '_authoes_thumbnail_id');
+		delete_option('autheos_setting_options');
 	}
-	delete_post_meta($post->ID, '_authoes_thumbnail_id');
 }

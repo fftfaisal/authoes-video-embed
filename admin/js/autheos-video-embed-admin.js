@@ -1,32 +1,71 @@
 (function( $ ) {
 	'use strict';
+	$(function() {
+		let set_thumbnail_btn = $('#select_default_thumbnail');
+		let set_input_val = $('#default_thumbnail');
+		let preview_thumbnail = $('#preview_thumbnail');
+		let remove_thumbnail = $('#remove_thumbnail');
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+		//set preview image
+		function autheos_set_preview_image(image_html) {
+			preview_thumbnail.empty();
+			preview_thumbnail.append(image_html);
+			remove_thumbnail.removeClass('button-disabled');
+		}
 
+		// get preview image from server
+		function autheos_get_preview_image (image_id) {
+			var data = {
+				action: 'authoes_get_thumbnail',
+				image_id: image_id
+			};
+			$.post(ajaxurl, data, function (response) {
+				autheos_set_preview_image(response);
+			});
+		}
+		// remove selcted thumbnail 
+		remove_thumbnail.on('click',function (e){
+			e.preventDefault();
+			preview_thumbnail.empty();
+			set_input_val.val('');
+			$(this).addClass('button-disabled');
+		});
+		/**
+		 * open the media manager
+		 */
+		set_thumbnail_btn.on('click',function (e) {
+			e.preventDefault();
+			var frame = wp.media({
+				title : 'Select Default Thumbnail',
+				multiple : false,
+				library : { type : 'image' },
+				button : { text : 'Set Thumbnail' }
+			});
+			// close event media manager
+			frame.on('close', function () {
+				var images = frame.state().get('selection');
+				// set the images
+				images.each(function (image) {
+					console.log(image)
+					autheos_get_preview_image(image.id);
+					set_input_val.val(image.id);
+				});
+			});
+
+			// open event media manager
+			frame.on('open', function () {
+				var attachment,
+					selection = frame.state().get('selection'),
+					id = set_input_val.value;
+
+				attachment = wp.media.attachment(id);
+				attachment.fetch();
+
+				selection.add(attachment ? [ attachment ] : []);
+			});
+
+			// everything is set open the media manager
+			frame.open();
+		});
+	});
 })( jQuery );

@@ -30,7 +30,7 @@ class Autheos_Video_Embed_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		
 	}
 
 }
